@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo/temp-logo.svg';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000'; // Add this line
+const API_URL = '/.netlify/functions/api'; // Update this line
 
 const SignUp: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);

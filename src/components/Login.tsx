@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo/temp-logo.svg';
 import axios from 'axios';
 
+const API_URL = '/.netlify/functions/api'; // Add this line
+
 const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
@@ -28,7 +30,7 @@ const Login: React.FC = () => {
     setError('');
 
     try {
-      const response = await axios.post('/api/login', { email, password });
+      const response = await axios.post(`${API_URL}/login`, { email, password });
       const { token, role } = response.data;
       localStorage.setItem('token', token);
       localStorage.setItem('userRole', role);
