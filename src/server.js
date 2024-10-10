@@ -67,19 +67,14 @@ const verifyToken = (req, res, next) => {
 };
 
 // Route to generate invite codes (protected, admin only)
-app.post('/api/generate-invite', verifyToken, async (req, res) => {
-  if (req.userRole !== 'admin') {
-    return res.status(403).json({ message: 'Access denied. Admin only.' });
-  }
-
+app.post('/api/generate-invite', async (req, res) => {
   try {
-    const { role, uses } = req.body;
-    const code = crypto.randomBytes(16).toString('hex');
+    const code = generateInviteCode();
     const [result] = await pool.query(
-      'INSERT INTO invite_codes (code, role, uses_left) VALUES (?, ?, ?)',
-      [code, role, uses]
+      'INSERT INTO invite_codes (code, role, uses_left) VALUES (?, "user", 1)',
+      [code]
     );
-    res.json({ code, role, uses });
+    res.json({ code });
   } catch (error) {
     console.error('Error generating invite code:', error);
     res.status(500).json({ message: 'Server error' });
@@ -394,21 +389,6 @@ app.use(express.static(path.join(__dirname, '../build')));
 // Update the catchall handler
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../build', 'index.html'));
-});
-
-// Add this new route for generating invite codes
-app.post('/api/generate-invite', async (req, res) => {
-  try {
-    const code = generateInviteCode();
-    const [result] = await pool.query(
-      'INSERT INTO invite_codes (code, role, uses_left) VALUES (?, "user", 1)',
-      [code]
-    );
-    res.json({ code });
-  } catch (error) {
-    console.error('Error generating invite code:', error);
-    res.status(500).json({ message: 'Server error' });
-  }
 });
 
 const PORT = process.env.PORT || 5000;

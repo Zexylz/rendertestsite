@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo/temp-logo.svg';
 import axios from 'axios';
 
+const API_URL = 'http://localhost:5000'; // Add this line
+
 const SignUp: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
@@ -30,7 +32,7 @@ const SignUp: React.FC = () => {
     setError('');
 
     try {
-      await axios.post('/api/signup', { email, password, inviteCode });
+      await axios.post(`${API_URL}/api/signup`, { email, password, inviteCode });
       navigate('/login');
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.data && typeof error.response.data === 'object' && 'message' in error.response.data) {
@@ -47,9 +49,9 @@ const SignUp: React.FC = () => {
     setIsLoading(true);
     setError('');
     try {
-      const response = await axios.post('/api/generate-invite');
+      const response = await axios.post(`${API_URL}/api/generate-invite`);
       setGeneratedInviteCode(response.data.code);
-      setInviteCode(response.data.code); // Automatically fill the invite code input
+      setInviteCode(response.data.code);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.data && typeof error.response.data === 'object' && 'message' in error.response.data) {
         setError(error.response.data.message as string);

@@ -7,7 +7,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "dev": "netlify dev"
+    "netlify-dev": "netlify dev"
   },
   "dependencies": {
     "@testing-library/react": "^16.0.1",
