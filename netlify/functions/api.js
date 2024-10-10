@@ -29,7 +29,7 @@ function generateInviteCode() {
 }
 
 // Generate invite code route
-app.post('/api/generate-invite', async (req, res) => {
+app.post('/generate-invite', async (req, res) => {
   try {
     const code = generateInviteCode();
     const [result] = await pool.query(
@@ -44,7 +44,7 @@ app.post('/api/generate-invite', async (req, res) => {
 });
 
 // Login route
-app.post('/api/login', async (req, res) => {
+app.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
@@ -69,7 +69,7 @@ app.post('/api/login', async (req, res) => {
 });
 
 // Signup route
-app.post('/api/signup', async (req, res) => {
+app.post('/signup', async (req, res) => {
   try {
     const { email, password, inviteCode } = req.body;
     
