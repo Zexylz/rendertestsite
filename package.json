@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "start": "node src/server.js",
-    "build": "cd client && npm install && npm run build",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "nodemon src/server.js",
-    "client": "cd client && npm start"
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "server": "node src/server.js",
+    "dev": "react-scripts start"
   },
   "dependencies": {
     "@testing-library/react": "^16.0.1",
