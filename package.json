@@ -1,14 +1,13 @@
 {
-  "name": "your-project-name",
+  "name": "test-app-v2",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "node src/server.js",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "server": "node src/server.js",
-    "dev": "react-scripts start"
+    "build": "cd client && npm install && npm run build",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "nodemon src/server.js",
+    "client": "cd client && npm start"
   },
   "dependencies": {
     "@testing-library/react": "^16.0.1",
