@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node src/server.js",
-    "build": "cd client && npm install && npm run build",
+    "build": "cd src && npm install && npm run build",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "nodemon src/server.js",
     "client": "cd client && npm start"
