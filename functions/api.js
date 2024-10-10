@@ -34,3 +34,18 @@ const pool = mysql.createPool({
 
 // Instead, export the handler
 module.exports.handler = serverless(app);
+
+// Add this new route for generating invite codes
+app.post('/api/generate-invite', async (req, res) => {
+  try {
+    const code = generateInviteCode();
+    const [result] = await pool.query(
+      'INSERT INTO invite_codes (code, role, uses_left) VALUES (?, "user", 1)',
+      [code]
+    );
+    res.json({ code });
+  } catch (error) {
+    console.error('Error generating invite code:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});

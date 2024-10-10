@@ -12,6 +12,7 @@ const SignUp: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const [error, setError] = useState<string>('');
+  const [generatedInviteCode, setGeneratedInviteCode] = useState('');
 
   useEffect(() => {
     if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -36,6 +37,24 @@ const SignUp: React.FC = () => {
         setError(error.response.data.message as string);
       } else {
         setError('An unexpected error occurred');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGenerateInviteCode = async () => {
+    setIsLoading(true);
+    setError('');
+    try {
+      const response = await axios.post('/api/generate-invite');
+      setGeneratedInviteCode(response.data.code);
+      setInviteCode(response.data.code); // Automatically fill the invite code input
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.data && typeof error.response.data === 'object' && 'message' in error.response.data) {
+        setError(error.response.data.message as string);
+      } else {
+        setError('An unexpected error occurred while generating invite code');
       }
     } finally {
       setIsLoading(false);
@@ -158,6 +177,20 @@ const SignUp: React.FC = () => {
     },
   };
 
+  const generateInviteButton: React.CSSProperties = {
+    width: '100%',
+    padding: '0.75rem',
+    borderRadius: '0.5rem',
+    border: 'none',
+    background: isDark ? '#4b5563' : '#e5e7eb',
+    color: isDark ? 'white' : 'black',
+    fontWeight: 'bold',
+    cursor: 'pointer',
+    transition: 'background 0.3s, transform 0.1s',
+    fontSize: '1rem',
+    marginTop: '1rem',
+  };
+
   return (
     <div style={styles.container}>
       <div style={styles.formContainer}>
@@ -221,6 +254,20 @@ const SignUp: React.FC = () => {
             {isLoading ? 'Signing up...' : 'Sign Up'}
           </button>
         </form>
+
+        <button
+          onClick={handleGenerateInviteCode}
+          style={generateInviteButton}
+          disabled={isLoading}
+        >
+          Generate Invite Code
+        </button>
+
+        {generatedInviteCode && (
+          <p style={{ ...styles.subtitle, marginTop: '1rem' }}>
+            Generated Invite Code: {generatedInviteCode}
+          </p>
+        )}
 
         <div style={styles.loginContainer}>
           <p style={styles.loginText}>

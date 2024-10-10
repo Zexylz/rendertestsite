@@ -396,6 +396,21 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../build', 'index.html'));
 });
 
+// Add this new route for generating invite codes
+app.post('/api/generate-invite', async (req, res) => {
+  try {
+    const code = generateInviteCode();
+    const [result] = await pool.query(
+      'INSERT INTO invite_codes (code, role, uses_left) VALUES (?, "user", 1)',
+      [code]
+    );
+    res.json({ code });
+  } catch (error) {
+    console.error('Error generating invite code:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, async () => {
   console.log(`Server is running on port ${PORT}`);
